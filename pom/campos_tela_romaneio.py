@@ -8,3 +8,7 @@ class CamposRomaneio:
     status_fila_pesagem = "#statusFila span"
     status_tag_verde = "#tagVerde span"
     tipo_fluxo = "#j_idt174 span"
+
+class Operacao700:
+    campo_parceiro = "#j_idt2643_input"
+    campo_safra = "#safra_700_input"

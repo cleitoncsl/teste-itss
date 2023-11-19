@@ -1,17 +1,22 @@
-import re
-from playwright.sync_api import Page, expect
+from time import sleep
+from playwright.sync_api import sync_playwright
 
-def test_has_title(page: Page):
-    page.goto("https://playwright.dev/")
+def event_handler(request_event):
+    response = request_event.response()
+    print(request_event.url)
+    print(response.status)
+    print(response.status, ' - ', request_event.url)
 
-    # Expect a title "to contain" a substring.
-    expect(page).to_have_title(re.compile("Playwright"))
 
-def test_get_started_link(page: Page):
-    page.goto("https://playwright.dev/")
+with sync_playwright() as p:
+    browser = p.firefox.launch(headless=True)
+    context = browser.new_context(
+        color_scheme='dark'
+    )
 
-    # Click the get started link.
-    page.get_by_role("link", name="Get started").click()
+    page = context.new_page()
 
-    # Expects page to have a heading with the name of Installation.
-    expect(page.get_by_role("heading", name="Installation")).to_be_visible()
+    page.on('requestfinished', event_handler)
+    page.goto('http://ddg.gg')
+
+    browser.close()
